@@ -19,13 +19,14 @@ var helpers = {
       .then(function(response){
 
         console.log(response);
-        return response.docs[0].formatted;
+        console.log(response.data.response.docs[0]);
+        return response.data.response.docs[0];
     })
 
   },
 
   // This function hits our own server to retrieve the record of query results
-  getHistory: function(){
+  getArticles: function(){
 
     return axios.get('/api/saved')
       .then(function(response){
@@ -36,9 +37,10 @@ var helpers = {
   },
 
   // This function posts new searches to our database.
-  postHistory: function(article){
+  postArticles: function(article){
 
-    return axios.post('/', {title: article})
+    console.log("DB Article ", article)
+    return axios.post('/', {title: article, date: date, url: url})
       .then(function(results){
 
         console.log("Posted to MongoDB");

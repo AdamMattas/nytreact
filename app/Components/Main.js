@@ -17,7 +17,8 @@ var Main = React.createClass({
     return {
       searchTerm: "",
       search: "",
-      history: [] /*Note how we added in this history state variable*/
+      // articles: "",
+      articles: [] /*Note how we added in this history state variable*/
     }
   },  
 
@@ -27,12 +28,14 @@ var Main = React.createClass({
       searchTerm: term
     })
   },
+
   // This function allows childrens to update the parent.
   setStart: function(startDate){
     this.setState({
       searchStart: startDate
     })
   },
+
   // This function allows childrens to update the parent.
   setEnd: function(endDate){
     this.setState({
@@ -57,20 +60,20 @@ var Main = React.createClass({
               search: data
             })
 
-            // After we've received the result... then post the search term to our history. 
-            helpers.postHistory(this.state.searchTerm)
+            // After we've received the result... then post the search term to our articles. 
+            helpers.postArticles(this.state.searchTerm)
               .then(function(data){
                 console.log("Updated!");
 
-                // After we've done the post... then get the updated history
+                // After we've done the post... then get the updated articles
                 helpers.getHistory()
                   .then(function(response){
-                    console.log("Current History", response.data);
-                    if (response != this.state.history){
-                      console.log ("History", response.data);
+                    console.log("Current Articles", response.data);
+                    if (response != this.state.articles){
+                      console.log ("Articles", response.data);
 
                       this.setState({
-                        history: response.data
+                        articles: response.data
                       })
                     }
                   }.bind(this)) 
@@ -82,17 +85,17 @@ var Main = React.createClass({
       }
   },
 
-  // The moment the page renders get the History
+  // The moment the page renders get the Articles
   componentDidMount: function(){
 
     // Get the latest history.
-    helpers.getHistory()
+    helpers.getArticles()
       .then(function(response){
-        if (response != this.state.history){
+        if (response != this.state.articles){
           console.log ("History", response.data);
 
           this.setState({
-            history: response.data
+            articles: response.data
           })
         }
       }.bind(this))
@@ -120,7 +123,7 @@ var Main = React.createClass({
 
           <div className="col-md-6">
         
-            
+            <Search articles={this.state.articles} />
 
           </div>
 

@@ -21449,7 +21449,8 @@
 	    return {
 	      searchTerm: "",
 	      search: "",
-	      history: [] /*Note how we added in this history state variable*/
+	      // articles: "",
+	      articles: [] /*Note how we added in this history state variable*/
 	    };
 	  },
 
@@ -21459,12 +21460,14 @@
 	      searchTerm: term
 	    });
 	  },
+
 	  // This function allows childrens to update the parent.
 	  setStart: function setStart(startDate) {
 	    this.setState({
 	      searchStart: startDate
 	    });
 	  },
+
 	  // This function allows childrens to update the parent.
 	  setEnd: function setEnd(endDate) {
 	    this.setState({
@@ -21487,18 +21490,18 @@
 	            search: data
 	          });
 
-	          // After we've received the result... then post the search term to our history. 
-	          helpers.postHistory(this.state.searchTerm).then(function (data) {
+	          // After we've received the result... then post the search term to our articles. 
+	          helpers.postArticles(this.state.searchTerm).then(function (data) {
 	            console.log("Updated!");
 
-	            // After we've done the post... then get the updated history
+	            // After we've done the post... then get the updated articles
 	            helpers.getHistory().then(function (response) {
-	              console.log("Current History", response.data);
-	              if (response != this.state.history) {
-	                console.log("History", response.data);
+	              console.log("Current Articles", response.data);
+	              if (response != this.state.articles) {
+	                console.log("Articles", response.data);
 
 	                this.setState({
-	                  history: response.data
+	                  articles: response.data
 	                });
 	              }
 	            }.bind(this));
@@ -21508,16 +21511,16 @@
 	    }
 	  },
 
-	  // The moment the page renders get the History
+	  // The moment the page renders get the Articles
 	  componentDidMount: function componentDidMount() {
 
 	    // Get the latest history.
-	    helpers.getHistory().then(function (response) {
-	      if (response != this.state.history) {
+	    helpers.getArticles().then(function (response) {
+	      if (response != this.state.articles) {
 	        console.log("History", response.data);
 
 	        this.setState({
-	          history: response.data
+	          articles: response.data
 	        });
 	      }
 	    }.bind(this));
@@ -21555,7 +21558,11 @@
 	          { className: 'col-md-6' },
 	          React.createElement(Form, { setTerm: this.setTerm, setStart: this.setStart, setEnd: this.setEnd })
 	        ),
-	        React.createElement('div', { className: 'col-md-6' })
+	        React.createElement(
+	          'div',
+	          { className: 'col-md-6' },
+	          React.createElement(Search, { articles: this.state.articles })
+	        )
 	      ),
 	      React.createElement('div', { className: 'row' })
 	    );
@@ -21691,9 +21698,53 @@
 
 /***/ },
 /* 175 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+
+	// Include React 
+	var React = __webpack_require__(1);
+
+	// This is the results component
+	var Search = React.createClass({
+	  displayName: "Search",
+
+
+	  // Here we render the function
+	  render: function render() {
+
+	    return React.createElement(
+	      "div",
+	      { className: "panel panel-default" },
+	      React.createElement(
+	        "div",
+	        { className: "panel-heading" },
+	        React.createElement(
+	          "h3",
+	          { className: "panel-title text-center" },
+	          "Search"
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "panel-body text-center" },
+	        this.props.articles.map(function (articles, i) {
+	          console.log(articles);
+	          return React.createElement(
+	            "p",
+	            { key: i },
+	            articles.headline.main,
+	            " - ",
+	            articles.headline.main
+	          );
+	        })
+	      )
+	    );
+	  }
+	});
+
+	// Export the component back for use in other files
+	module.exports = Search;
 
 /***/ },
 /* 176 */
@@ -21721,12 +21772,13 @@
 	    return axios.get(queryURL).then(function (response) {
 
 	      console.log(response);
-	      return response.docs[0].formatted;
+	      console.log(response.data.response.docs[0]);
+	      return response.data.response.docs[0];
 	    });
 	  },
 
 	  // This function hits our own server to retrieve the record of query results
-	  getHistory: function getHistory() {
+	  getArticles: function getArticles() {
 
 	    return axios.get('/api/saved').then(function (response) {
 
@@ -21736,9 +21788,10 @@
 	  },
 
 	  // This function posts new searches to our database.
-	  postHistory: function postHistory(article) {
+	  postArticles: function postArticles(article) {
 
-	    return axios.post('/', { title: article }).then(function (results) {
+	    console.log("DB Article ", article);
+	    return axios.post('/', { title: article, date: date, url: url }).then(function (results) {
 
 	      console.log("Posted to MongoDB");
 	      return results;
