@@ -1,6 +1,11 @@
 // Include React 
 var React = require('react');
 
+var Query = require('./Query');
+
+// Helper Function
+var helpers = require('../utils/helpers.js');
+
 // This is the results component
 var Results = React.createClass({
 
@@ -15,13 +20,18 @@ var Results = React.createClass({
         </div>
         <div className="panel-body text-center">
 
-            {console.log(this.props.results)}
-            {this.props.results.map(function(results, i)
-              {
-                console.log("GOES HERE", results);
-                return <p key={i}>{results.headline.main} - {results.headline.main}</p> 
-              }
-            )}
+
+            {this.props.results.map(function(results, i) {
+              return (
+                <Query 
+                  key={results._id}
+                  title={results.headline.main}
+                  lead={results.lead_paragraph}
+                  url={results.web_url}
+                  date={results.pub_date}
+                />
+              )
+            })}
 
         </div>
       </div>

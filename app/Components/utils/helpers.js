@@ -37,10 +37,10 @@ var helpers = {
   },
 
   // This function posts new searches to our database.
-  postArticles: function(article){
+  postArticles: function(article, date, url){
 
     console.log("DB Article ", article)
-    return axios.post('/', {title: article, date: date, url: url})
+    return axios.post('/api/saved', {title: article, date: date, url: url})
       .then(function(results){
 
         console.log("Posted to MongoDB");

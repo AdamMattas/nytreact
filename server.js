@@ -69,7 +69,8 @@ app.post('/api/saved', function(req, res){
       console.log(err);
     }
     else {
-      res.send("Saved Search");
+      // res.send("Saved Search");
+      res.json({status: 'saved'})
     }
   })
 });

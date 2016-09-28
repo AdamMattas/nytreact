@@ -62,11 +62,7 @@ var Main = React.createClass({
             var newResults = [];
             for(var i=0; i<arrLength.length; i++){
               newResults.push(arrLength[i]);
-              //console.log(arrLength[i]);
             }
-            // $.each(data, function (i, p) {
-            //     newResults.push(data.data.response.docs[i]);
-            // });
 
             this.setState({
               results: newResults
@@ -127,21 +123,21 @@ var Main = React.createClass({
             <p className="text-center"><em>Enter a landmark to search for its exact address (ex: "Eiffel Tower").</em></p>
           </div>
 
-          <div className="col-md-6">
+          <div className="col-md-12">
           
             <Form setTerm={this.setTerm} setStart={this.setStart} setEnd={this.setEnd}/>
 
           </div>
 
-          <div className="col-md-6">
+          <div className="col-md-12">
         
-            <Search articles={this.state.articles} />
+            <Results results={this.state.results} />
 
           </div>
 
-          <div className="col-md-6">
+          <div className="col-md-12">
         
-            <Results results={this.state.results} />
+            <Saved articles={this.state.articles} />
 
           </div>
 

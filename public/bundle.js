@@ -21434,11 +21434,11 @@
 	// Here we include all of the sub-components
 	var Form = __webpack_require__(173);
 	var Results = __webpack_require__(174);
-	var Saved = __webpack_require__(175);
-	var Search = __webpack_require__(176);
+	var Saved = __webpack_require__(199);
+	var Search = __webpack_require__(200);
 
 	// Helper Function
-	var helpers = __webpack_require__(177);
+	var helpers = __webpack_require__(176);
 
 	// This is the main component. 
 	var Main = React.createClass({
@@ -21492,11 +21492,7 @@
 	          var newResults = [];
 	          for (var i = 0; i < arrLength.length; i++) {
 	            newResults.push(arrLength[i]);
-	            //console.log(arrLength[i]);
 	          }
-	          // $.each(data, function (i, p) {
-	          //     newResults.push(data.data.response.docs[i]);
-	          // });
 
 	          this.setState({
 	            results: newResults
@@ -21570,18 +21566,18 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'col-md-6' },
+	          { className: 'col-md-12' },
 	          React.createElement(Form, { setTerm: this.setTerm, setStart: this.setStart, setEnd: this.setEnd })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'col-md-6' },
-	          React.createElement(Search, { articles: this.state.articles })
+	          { className: 'col-md-12' },
+	          React.createElement(Results, { results: this.state.results })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'col-md-6' },
-	          React.createElement(Results, { results: this.state.results })
+	          { className: 'col-md-12' },
+	          React.createElement(Saved, { articles: this.state.articles })
 	        )
 	      ),
 	      React.createElement('div', { className: 'row' })
@@ -21714,44 +21710,47 @@
 /* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	// Include React 
 	var React = __webpack_require__(1);
 
+	var Query = __webpack_require__(175);
+
+	// Helper Function
+	var helpers = __webpack_require__(176);
+
 	// This is the results component
 	var Results = React.createClass({
-	  displayName: "Results",
+	  displayName: 'Results',
 
 
 	  // Here we render the function
 	  render: function render() {
 
 	    return React.createElement(
-	      "div",
-	      { className: "panel panel-default" },
+	      'div',
+	      { className: 'panel panel-default' },
 	      React.createElement(
-	        "div",
-	        { className: "panel-heading" },
+	        'div',
+	        { className: 'panel-heading' },
 	        React.createElement(
-	          "h3",
-	          { className: "panel-title text-center" },
-	          "Results"
+	          'h3',
+	          { className: 'panel-title text-center' },
+	          'Results'
 	        )
 	      ),
 	      React.createElement(
-	        "div",
-	        { className: "panel-body text-center" },
-	        console.log(this.props.results),
+	        'div',
+	        { className: 'panel-body text-center' },
 	        this.props.results.map(function (results, i) {
-	          console.log("GOES HERE", results);
-	          return React.createElement(
-	            "p",
-	            { key: i },
-	            results.headline.main,
-	            " - ",
-	            results.headline.main
-	          );
+	          return React.createElement(Query, {
+	            key: results._id,
+	            title: results.headline.main,
+	            lead: results.lead_paragraph,
+	            url: results.web_url,
+	            date: results.pub_date
+	          });
 	        })
 	      )
 	    );
@@ -21763,9 +21762,98 @@
 
 /***/ },
 /* 175 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	// Include React 
+	var React = __webpack_require__(1);
+
+	// Helper Function
+	var helpers = __webpack_require__(176);
+
+	// This is the results component
+	var Query = React.createClass({
+	  displayName: 'Query',
+
+
+	  // This function will respond to the user click
+	  handleClick: function handleClick() {
+	    // Send article data to server to save to db
+	    helpers.postArticles({
+	      title: this.props.title,
+	      date: this.props.date,
+	      url: this.props.url
+	    }).then(function (res) {
+	      console.log(res.status);
+	      // Show message
+	      //this.props.saved(res.status);
+	    }.bind(this));
+	  },
+
+	  // Here we render the function
+	  render: function render() {
+
+	    return React.createElement(
+	      'div',
+	      { className: 'panel panel-default' },
+	      React.createElement(
+	        'div',
+	        { className: 'panel-heading' },
+	        React.createElement(
+	          'h3',
+	          { className: 'panel-title text-center' },
+	          'Query'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'panel-body text-center' },
+	        React.createElement(
+	          'li',
+	          { className: 'list-group-item' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            React.createElement(
+	              'em',
+	              null,
+	              this.props.title
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              this.props.lead
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'btn-group pull-right' },
+	              React.createElement(
+	                'button',
+	                { className: 'btn btn-primary', onClick: this.handleClick },
+	                'Save'
+	              ),
+	              React.createElement(
+	                'a',
+	                { className: 'btn btn-default', href: this.props.url, target: '_blank' },
+	                'View Article'
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'Date Published: ',
+	            this.props.date
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	// Export the component back for use in other files
+	module.exports = Query;
 
 /***/ },
 /* 176 */
@@ -21773,58 +21861,8 @@
 
 	"use strict";
 
-	// Include React 
-	var React = __webpack_require__(1);
-
-	// This is the results component
-	var Search = React.createClass({
-	  displayName: "Search",
-
-
-	  // Here we render the function
-	  render: function render() {
-
-	    return React.createElement(
-	      "div",
-	      { className: "panel panel-default" },
-	      React.createElement(
-	        "div",
-	        { className: "panel-heading" },
-	        React.createElement(
-	          "h3",
-	          { className: "panel-title text-center" },
-	          "Search"
-	        )
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "panel-body text-center" },
-	        this.props.articles.map(function (articles, i) {
-	          console.log("GOES HERE", articles.headline.main);
-	          return React.createElement(
-	            "p",
-	            { key: i },
-	            articles.headline.main,
-	            " - ",
-	            articles.headline.main
-	          );
-	        })
-	      )
-	    );
-	  }
-	});
-
-	// Export the component back for use in other files
-	module.exports = Search;
-
-/***/ },
-/* 177 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
 	// Include the axios package for performing HTTP requests (promise based alternative to request)
-	var axios = __webpack_require__(178);
+	var axios = __webpack_require__(177);
 
 	// This variable will be pre-programmed with our authentication key (the one we received when we registered)
 	var authKey = "b9f91d369ff59547cd47b931d8cbc56b:0:74623931";
@@ -21859,10 +21897,10 @@
 	  },
 
 	  // This function posts new searches to our database.
-	  postArticles: function postArticles(article) {
+	  postArticles: function postArticles(article, date, url) {
 
 	    console.log("DB Article ", article);
-	    return axios.post('/', { title: article, date: date, url: url }).then(function (results) {
+	    return axios.post('/api/saved', { title: article, date: date, url: url }).then(function (results) {
 
 	      console.log("Posted to MongoDB");
 	      return results;
@@ -21875,20 +21913,20 @@
 	module.exports = helpers;
 
 /***/ },
-/* 178 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(179);
+	module.exports = __webpack_require__(178);
 
 /***/ },
-/* 179 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
-	var bind = __webpack_require__(181);
-	var Axios = __webpack_require__(182);
+	var utils = __webpack_require__(179);
+	var bind = __webpack_require__(180);
+	var Axios = __webpack_require__(181);
 
 	/**
 	 * Create an instance of Axios
@@ -21924,7 +21962,7 @@
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(199);
+	axios.spread = __webpack_require__(198);
 
 	module.exports = axios;
 
@@ -21933,12 +21971,12 @@
 
 
 /***/ },
-/* 180 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(181);
+	var bind = __webpack_require__(180);
 
 	/*global toString:true*/
 
@@ -22238,7 +22276,7 @@
 
 
 /***/ },
-/* 181 */
+/* 180 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22255,17 +22293,17 @@
 
 
 /***/ },
-/* 182 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(183);
-	var utils = __webpack_require__(180);
-	var InterceptorManager = __webpack_require__(185);
-	var dispatchRequest = __webpack_require__(186);
-	var isAbsoluteURL = __webpack_require__(197);
-	var combineURLs = __webpack_require__(198);
+	var defaults = __webpack_require__(182);
+	var utils = __webpack_require__(179);
+	var InterceptorManager = __webpack_require__(184);
+	var dispatchRequest = __webpack_require__(185);
+	var isAbsoluteURL = __webpack_require__(196);
+	var combineURLs = __webpack_require__(197);
 
 	/**
 	 * Create a new instance of Axios
@@ -22346,13 +22384,13 @@
 
 
 /***/ },
-/* 183 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
-	var normalizeHeaderName = __webpack_require__(184);
+	var utils = __webpack_require__(179);
+	var normalizeHeaderName = __webpack_require__(183);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -22424,12 +22462,12 @@
 
 
 /***/ },
-/* 184 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
+	var utils = __webpack_require__(179);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -22442,12 +22480,12 @@
 
 
 /***/ },
-/* 185 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
+	var utils = __webpack_require__(179);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -22500,13 +22538,13 @@
 
 
 /***/ },
-/* 186 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(180);
-	var transformData = __webpack_require__(187);
+	var utils = __webpack_require__(179);
+	var transformData = __webpack_require__(186);
 
 	/**
 	 * Dispatch a request to the server using whichever adapter
@@ -22547,10 +22585,10 @@
 	    adapter = config.adapter;
 	  } else if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(188);
+	    adapter = __webpack_require__(187);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(188);
+	    adapter = __webpack_require__(187);
 	  }
 
 	  return Promise.resolve(config)
@@ -22582,12 +22620,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 187 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
+	var utils = __webpack_require__(179);
 
 	/**
 	 * Transform the data for a request or a response
@@ -22608,18 +22646,18 @@
 
 
 /***/ },
-/* 188 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(180);
-	var settle = __webpack_require__(189);
-	var buildURL = __webpack_require__(192);
-	var parseHeaders = __webpack_require__(193);
-	var isURLSameOrigin = __webpack_require__(194);
-	var createError = __webpack_require__(190);
-	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(195);
+	var utils = __webpack_require__(179);
+	var settle = __webpack_require__(188);
+	var buildURL = __webpack_require__(191);
+	var parseHeaders = __webpack_require__(192);
+	var isURLSameOrigin = __webpack_require__(193);
+	var createError = __webpack_require__(189);
+	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(194);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -22713,7 +22751,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(196);
+	      var cookies = __webpack_require__(195);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -22777,12 +22815,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 189 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(190);
+	var createError = __webpack_require__(189);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -22808,12 +22846,12 @@
 
 
 /***/ },
-/* 190 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(191);
+	var enhanceError = __webpack_require__(190);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -22831,7 +22869,7 @@
 
 
 /***/ },
-/* 191 */
+/* 190 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22856,12 +22894,12 @@
 
 
 /***/ },
-/* 192 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
+	var utils = __webpack_require__(179);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -22930,12 +22968,12 @@
 
 
 /***/ },
-/* 193 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
+	var utils = __webpack_require__(179);
 
 	/**
 	 * Parse headers into an object
@@ -22973,12 +23011,12 @@
 
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
+	var utils = __webpack_require__(179);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -23047,7 +23085,7 @@
 
 
 /***/ },
-/* 195 */
+/* 194 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23089,12 +23127,12 @@
 
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(180);
+	var utils = __webpack_require__(179);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -23148,7 +23186,7 @@
 
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23168,7 +23206,7 @@
 
 
 /***/ },
-/* 198 */
+/* 197 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23186,7 +23224,7 @@
 
 
 /***/ },
-/* 199 */
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23217,6 +23255,106 @@
 	  };
 	};
 
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	// Include React 
+	var React = __webpack_require__(1);
+
+	// This is the results component
+	var Saved = React.createClass({
+	  displayName: "Saved",
+
+
+	  // Here we render the function
+	  render: function render() {
+
+	    return React.createElement(
+	      "div",
+	      { className: "panel panel-default" },
+	      React.createElement(
+	        "div",
+	        { className: "panel-heading" },
+	        React.createElement(
+	          "h3",
+	          { className: "panel-title text-center" },
+	          "Saved"
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "panel-body text-center" },
+	        this.props.articles.map(function (articles, i) {
+	          console.log("GOES HERE", articles.headline.main);
+	          return React.createElement(
+	            "p",
+	            { key: i },
+	            articles.headline.main,
+	            " - ",
+	            articles.headline.main
+	          );
+	        })
+	      )
+	    );
+	  }
+	});
+
+	// Export the component back for use in other files
+	module.exports = Saved;
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	// Include React 
+	var React = __webpack_require__(1);
+
+	// This is the results component
+	var Search = React.createClass({
+	  displayName: "Search",
+
+
+	  // Here we render the function
+	  render: function render() {
+
+	    return React.createElement(
+	      "div",
+	      { className: "panel panel-default" },
+	      React.createElement(
+	        "div",
+	        { className: "panel-heading" },
+	        React.createElement(
+	          "h3",
+	          { className: "panel-title text-center" },
+	          "Search"
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "panel-body text-center" },
+	        this.props.articles.map(function (articles, i) {
+	          console.log("GOES HERE", articles.headline.main);
+	          return React.createElement(
+	            "p",
+	            { key: i },
+	            articles.headline.main,
+	            " - ",
+	            articles.headline.main
+	          );
+	        })
+	      )
+	    );
+	  }
+	});
+
+	// Export the component back for use in other files
+	module.exports = Search;
 
 /***/ }
 /******/ ]);
