@@ -2,7 +2,7 @@
 var React = require('react');
 
 // This is the results component
-var Search = React.createClass({
+var Results = React.createClass({
 
   // Here we render the function
   render: function(){
@@ -11,14 +11,15 @@ var Search = React.createClass({
 
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h3 className="panel-title text-center">Search</h3>
+          <h3 className="panel-title text-center">Results</h3>
         </div>
         <div className="panel-body text-center">
 
-            {this.props.articles.map(function(articles, i)
+            {console.log(this.props.results)}
+            {this.props.results.map(function(results, i)
               {
-                console.log("GOES HERE", articles.headline.main);
-                return <p key={i}>{articles.headline.main} - {articles.headline.main}</p> 
+                console.log("GOES HERE", results);
+                return <p key={i}>{results.headline.main} - {results.headline.main}</p> 
               }
             )}
 
@@ -30,4 +31,4 @@ var Search = React.createClass({
 });
 
 // Export the component back for use in other files
-module.exports = Search;
+module.exports = Results;

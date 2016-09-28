@@ -3,6 +3,7 @@ var React = require('react');
 
 // Here we include all of the sub-components
 var Form = require('./Children/Form');
+var Results = require('./Children/Results');
 var Saved = require('./Children/Saved');
 var Search = require('./Children/Search');
 
@@ -17,6 +18,7 @@ var Main = React.createClass({
     return {
       searchTerm: "",
       search: "",
+      results: [],
       // articles: "",
       articles: [] /*Note how we added in this history state variable*/
     }
@@ -52,33 +54,43 @@ var Main = React.createClass({
       // Run the query for the address
       helpers.runQuery(this.state.searchTerm, this.state.searchStart, this.state.searchEnd)
         .then(function(data){
-          if (data != this.state.search)
+          if (data != this.state.results)
           {
             console.log("Search" , data);
 
+            var arrLength = data.data.response.docs;
+            var newResults = [];
+            for(var i=0; i<arrLength.length; i++){
+              newResults.push(arrLength[i]);
+              //console.log(arrLength[i]);
+            }
+            // $.each(data, function (i, p) {
+            //     newResults.push(data.data.response.docs[i]);
+            // });
+
             this.setState({
-              search: data
+              results: newResults
             })
 
             // After we've received the result... then post the search term to our articles. 
-            helpers.postArticles(this.state.searchTerm)
-              .then(function(data){
-                console.log("Updated!");
+            // helpers.postArticles(this.state.searchTerm)
+            //   .then(function(data){
+            //     console.log("Updated!");
 
-                // After we've done the post... then get the updated articles
-                helpers.getHistory()
-                  .then(function(response){
-                    console.log("Current Articles", response.data);
-                    if (response != this.state.articles){
-                      console.log ("Articles", response.data);
+            //     // After we've done the post... then get the updated articles
+            //     helpers.getHistory()
+            //       .then(function(response){
+            //         console.log("Current Articles", response.data);
+            //         if (response != this.state.articles){
+            //           console.log ("Articles", response.data);
 
-                      this.setState({
-                        articles: response.data
-                      })
-                    }
-                  }.bind(this)) 
-              }.bind(this)
-            )
+            //           this.setState({
+            //             articles: response.data
+            //           })
+            //         }
+            //       }.bind(this)) 
+            //   }.bind(this)
+            // )
           }
         }.bind(this))
         
@@ -92,7 +104,7 @@ var Main = React.createClass({
     helpers.getArticles()
       .then(function(response){
         if (response != this.state.articles){
-          console.log ("History", response.data);
+          console.log ("Database", response.data);
 
           this.setState({
             articles: response.data
@@ -124,6 +136,12 @@ var Main = React.createClass({
           <div className="col-md-6">
         
             <Search articles={this.state.articles} />
+
+          </div>
+
+          <div className="col-md-6">
+        
+            <Results results={this.state.results} />
 
           </div>
 

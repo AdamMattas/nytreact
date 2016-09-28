@@ -20,7 +20,7 @@ var helpers = {
 
         console.log(response);
         console.log(response.data.response.docs[0]);
-        return response.data.response.docs[0];
+        return response;
     })
 
   },
