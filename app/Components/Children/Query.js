@@ -33,8 +33,7 @@ var Query = React.createClass({
         <div className="panel-body text-center">
 
             <li className="list-group-item">
-              <h3>
-                <em>{this.props.title}</em>
+                <h3>{this.props.title}</h3>
                 <p>{this.props.lead}</p>
                 <div className="btn-group pull-right">
                   <button className="btn btn-primary" onClick={this.handleClick}>Save</button>
@@ -42,7 +41,6 @@ var Query = React.createClass({
                     View Article
                   </a>
                 </div>
-              </h3>
               <p>Date Published: {this.props.date}</p>
             </li>
 

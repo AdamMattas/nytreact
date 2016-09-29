@@ -21815,29 +21815,25 @@
 	          React.createElement(
 	            'h3',
 	            null,
+	            this.props.title
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            this.props.lead
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'btn-group pull-right' },
 	            React.createElement(
-	              'em',
-	              null,
-	              this.props.title
+	              'button',
+	              { className: 'btn btn-primary', onClick: this.handleClick },
+	              'Save'
 	            ),
 	            React.createElement(
-	              'p',
-	              null,
-	              this.props.lead
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'btn-group pull-right' },
-	              React.createElement(
-	                'button',
-	                { className: 'btn btn-primary', onClick: this.handleClick },
-	                'Save'
-	              ),
-	              React.createElement(
-	                'a',
-	                { className: 'btn btn-default', href: this.props.url, target: '_blank' },
-	                'View Article'
-	              )
+	              'a',
+	              { className: 'btn btn-default', href: this.props.url, target: '_blank' },
+	              'View Article'
 	            )
 	          ),
 	          React.createElement(
@@ -21897,10 +21893,10 @@
 	  },
 
 	  // This function posts new searches to our database.
-	  postArticles: function postArticles(article, date, url) {
+	  postArticles: function postArticles(article) {
 
 	    console.log("DB Article ", article);
-	    return axios.post('/api/saved', { title: article, date: date, url: url }).then(function (results) {
+	    return axios.post('/api/saved', { title: article.title, date: article.date, url: article.url }).then(function (results) {
 
 	      console.log("Posted to MongoDB");
 	      return results;

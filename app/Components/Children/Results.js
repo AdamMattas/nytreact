@@ -20,7 +20,6 @@ var Results = React.createClass({
         </div>
         <div className="panel-body text-center">
 
-
             {this.props.results.map(function(results, i) {
               return (
                 <Query 

@@ -61,10 +61,10 @@ app.get('/api/saved', function(req, res) {
 // This is the route we will send POST requests to save each search.
 app.post('/api/saved', function(req, res){
   var newSearch = new Article(req.body);
-  console.log("BODY: " + req.body.title);
+  console.log("BODY: " + newSearch);
 
   // Here we'll save the article based on the JSON input. 
-  Article.create({"title": req.body.title, "date": req.body.title, "url": req.body.url}, function(err){
+  Article.create({"title": req.body.title, "date": req.body.date, "url": req.body.url}, function(err){
     if(err){
       console.log(err);
     }
