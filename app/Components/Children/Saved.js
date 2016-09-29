@@ -17,8 +17,8 @@ var Saved = React.createClass({
 
             {this.props.articles.map(function(articles, i)
               {
-                console.log("GOES HERE", articles.headline.main);
-                return <p key={i}>{articles.headline.main} - {articles.headline.main}</p> 
+                console.log("GOES HERE", articles.title);
+                return <p key={i}>{articles.title} - {articles.title}</p> 
               }
             )}
 

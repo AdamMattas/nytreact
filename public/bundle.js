@@ -21488,35 +21488,15 @@
 	        if (data != this.state.results) {
 	          console.log("Search", data);
 
-	          var arrLength = data.data.response.docs;
+	          var queryArr = data.data.response.docs;
 	          var newResults = [];
-	          for (var i = 0; i < arrLength.length; i++) {
-	            newResults.push(arrLength[i]);
+	          for (var i = 0; i < queryArr.length; i++) {
+	            newResults.push(queryArr[i]);
 	          }
 
 	          this.setState({
 	            results: newResults
 	          });
-
-	          // After we've received the result... then post the search term to our articles. 
-	          // helpers.postArticles(this.state.searchTerm)
-	          //   .then(function(data){
-	          //     console.log("Updated!");
-
-	          //     // After we've done the post... then get the updated articles
-	          //     helpers.getHistory()
-	          //       .then(function(response){
-	          //         console.log("Current Articles", response.data);
-	          //         if (response != this.state.articles){
-	          //           console.log ("Articles", response.data);
-
-	          //           this.setState({
-	          //             articles: response.data
-	          //           })
-	          //         }
-	          //       }.bind(this)) 
-	          //   }.bind(this)
-	          // )
 	        }
 	      }.bind(this));
 	    }
@@ -21528,10 +21508,16 @@
 	    // Get the latest history.
 	    helpers.getArticles().then(function (response) {
 	      if (response != this.state.articles) {
-	        console.log("Database", response.data);
+	        console.log("Database", response);
+
+	        var dbArr = response.data;
+	        var newResponse = [];
+	        for (var i = 0; i < dbArr.length; i++) {
+	          newResponse.push(dbArr[i]);
+	        }
 
 	        this.setState({
-	          articles: response.data
+	          articles: newResponse
 	        });
 	      }
 	    }.bind(this));
@@ -23285,13 +23271,13 @@
 	        "div",
 	        { className: "panel-body text-center" },
 	        this.props.articles.map(function (articles, i) {
-	          console.log("GOES HERE", articles.headline.main);
+	          console.log("GOES HERE", articles.title);
 	          return React.createElement(
 	            "p",
 	            { key: i },
-	            articles.headline.main,
+	            articles.title,
 	            " - ",
-	            articles.headline.main
+	            articles.title
 	          );
 	        })
 	      )
