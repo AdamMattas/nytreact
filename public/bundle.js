@@ -21435,7 +21435,7 @@
 	var Form = __webpack_require__(173);
 	var Results = __webpack_require__(174);
 	var Saved = __webpack_require__(199);
-	var Search = __webpack_require__(200);
+	var Search = __webpack_require__(201);
 
 	// Helper Function
 	var helpers = __webpack_require__(176);
@@ -21768,6 +21768,7 @@
 	    // Send article data to server to save to db
 	    helpers.postArticles({
 	      title: this.props.title,
+	      lead: this.props.lead,
 	      date: this.props.date,
 	      url: this.props.url
 	    }).then(function (res) {
@@ -21872,6 +21873,17 @@
 	    return axios.post('/api/saved', { title: article.title, date: article.date, url: article.url }).then(function (results) {
 
 	      console.log("Posted to MongoDB");
+	      return results;
+	    });
+	  },
+
+	  // This function posts new searches to our database.
+	  deleteArticles: function deleteArticles(id) {
+
+	    console.log("DB Article ", id);
+	    return axios.delete('/api/delete/' + id).then(function (results) {
+
+	      console.log("Deleted from MongoDB");
 	      return results;
 	    });
 	  }
@@ -23229,43 +23241,45 @@
 /* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	// Include React 
 	var React = __webpack_require__(1);
 
+	var Action = __webpack_require__(200);
+
 	// This is the results component
 	var Saved = React.createClass({
-	  displayName: "Saved",
+	  displayName: 'Saved',
 
 
 	  // Here we render the function
 	  render: function render() {
 
 	    return React.createElement(
-	      "div",
-	      { className: "panel panel-default" },
+	      'div',
+	      { className: 'panel panel-default' },
 	      React.createElement(
-	        "div",
-	        { className: "panel-heading" },
+	        'div',
+	        { className: 'panel-heading' },
 	        React.createElement(
-	          "h3",
-	          { className: "panel-title text-center" },
-	          "Saved"
+	          'h3',
+	          { className: 'panel-title text-center' },
+	          'Saved'
 	        )
 	      ),
 	      React.createElement(
-	        "div",
-	        { className: "panel-body text-center" },
+	        'div',
+	        { className: 'panel-body text-center' },
 	        this.props.articles.map(function (articles, i) {
-	          console.log("GOES HERE", articles.title);
-	          return React.createElement(
-	            "p",
-	            { key: i },
-	            articles.title,
-	            " - ",
-	            articles.title
-	          );
+	          return React.createElement(Action, {
+	            key: articles._id,
+	            id: articles._id,
+	            title: articles.title,
+	            lead: articles.lead,
+	            url: articles.url,
+	            date: articles.date
+	          });
 	        })
 	      )
 	    );
@@ -23277,6 +23291,80 @@
 
 /***/ },
 /* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Include React 
+	var React = __webpack_require__(1);
+
+	// Helper Function
+	var helpers = __webpack_require__(176);
+
+	// This is the results component
+	var Action = React.createClass({
+	  displayName: 'Action',
+
+
+	  // This function will respond to the user click
+	  handleClick: function handleClick() {
+	    // Send article data to server to delete from db
+	    helpers.deleteArticles(this.props.id).then(function (res) {
+	      console.log(res.status);
+	      // Show message
+	      //this.props.saved(res.status);
+	    }.bind(this));
+	  },
+
+	  // Here we render the function
+	  render: function render() {
+
+	    return React.createElement(
+	      'div',
+	      { className: 'panel-body text-center' },
+	      React.createElement(
+	        'li',
+	        { className: 'list-group-item' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          this.props.title
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          this.props.lead
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'btn-group pull-right' },
+	          React.createElement(
+	            'button',
+	            { className: 'btn btn-primary', onClick: this.handleClick },
+	            'Remove'
+	          ),
+	          React.createElement(
+	            'a',
+	            { className: 'btn btn-default', href: this.props.url, target: '_blank' },
+	            'View Article'
+	          )
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Date Published: ',
+	          this.props.date
+	        )
+	      )
+	    );
+	  }
+	});
+
+	// Export the component back for use in other files
+	module.exports = Action;
+
+/***/ },
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

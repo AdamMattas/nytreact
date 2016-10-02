@@ -1,6 +1,8 @@
 // Include React 
 var React = require('react');
 
+var Action = require('./Action');
+
 // This is the results component
 var Saved = React.createClass({
 
@@ -15,12 +17,18 @@ var Saved = React.createClass({
         </div>
         <div className="panel-body text-center">
 
-            {this.props.articles.map(function(articles, i)
-              {
-                console.log("GOES HERE", articles.title);
-                return <p key={i}>{articles.title} - {articles.title}</p> 
-              }
-            )}
+            {this.props.articles.map(function(articles, i) {
+              return (
+                <Action 
+                  key={articles._id}
+                  id={articles._id}
+                  title={articles.title}
+                  lead={articles.lead}
+                  url={articles.url}
+                  date={articles.date}
+                />
+              )
+            })}
 
         </div>
       </div>

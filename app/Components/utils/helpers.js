@@ -46,6 +46,18 @@ var helpers = {
         console.log("Posted to MongoDB");
         return(results);
       })
+  },
+
+  // This function posts new searches to our database.
+  deleteArticles: function(id){
+
+    console.log("DB Article ", id)
+    return axios.delete('/api/delete/' + id)
+      .then(function(results){
+
+        console.log("Deleted from MongoDB");
+        return(results);
+      })
   }
 
 }

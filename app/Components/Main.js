@@ -3,7 +3,7 @@ var React = require('react');
 
 // Here we include all of the sub-components
 var Form = require('./Children/Form');
-var Results = require('./Children/Results');
+var Results = require('./Children/Search_Children/Results');
 var Saved = require('./Children/Saved');
 var Search = require('./Children/Search');
 

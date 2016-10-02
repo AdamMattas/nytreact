@@ -2,7 +2,7 @@
 var React = require('react');
 
 // Helper Function
-var helpers = require('../utils/helpers.js');
+var helpers = require('../../utils/helpers.js');
 
 // This is the results component
 var Query = React.createClass({
@@ -12,6 +12,7 @@ var Query = React.createClass({
     // Send article data to server to save to db
     helpers.postArticles({
       title: this.props.title,
+      lead: this.props.lead,
       date: this.props.date,
       url: this.props.url
     }).then(function(res){

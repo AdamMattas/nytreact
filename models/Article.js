@@ -5,6 +5,9 @@ var ArticleSchema = new Schema({
   title: {
     type: String,
   },
+  lead: {
+    type: String,
+  },
   date: {
     type: Date
   },

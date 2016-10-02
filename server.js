@@ -68,7 +68,7 @@ app.post('/api/saved', function(req, res){
         console.log('Already exists!');
     }else{
       // Here we'll save the article based on the JSON input. 
-      Article.create({"title": req.body.title, "date": req.body.date, "url": req.body.url}, function(err){
+      Article.create({"title": req.body.title, "lead": req.body.lead, "date": req.body.date, "url": req.body.url}, function(err){
         if(err){
           console.log(err);
         }
@@ -80,6 +80,26 @@ app.post('/api/saved', function(req, res){
     }
   }); 
 
+});
+
+// Delete One from the DB
+app.delete('/api/delete/:id', function(req, res) {
+
+  // remove a note using the objectID
+  Article.remove({"_id": req.params.id})
+  .exec(function(err, data) {
+    // log any errors from mongojs
+    if (err) {
+      console.log(err);
+    } 
+    // otherwise, send the mongojs response to the browser.
+    // this will fire off the success function of the ajax request
+    else {
+      console.log(data);
+      res.send(data);
+      //res.sendFile('./public/index.html');
+    }
+  });
 });
 
 // -------------------------------------------------
