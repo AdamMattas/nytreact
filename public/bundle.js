@@ -21751,7 +21751,7 @@
 	  postArticles: function postArticles(article) {
 
 	    console.log("DB Article ", article);
-	    return axios.post('/api/saved', { title: article.title, date: article.date, url: article.url }).then(function (results) {
+	    return axios.post('/api/saved', { title: article.title, lead: article.lead, date: article.date, url: article.url }).then(function (results) {
 
 	      console.log("Posted to MongoDB");
 	      return results;

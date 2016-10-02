@@ -40,7 +40,7 @@ var helpers = {
   postArticles: function(article){
 
     console.log("DB Article ", article)
-    return axios.post('/api/saved', {title: article.title, date: article.date, url: article.url})
+    return axios.post('/api/saved', {title: article.title, lead: article.lead, date: article.date, url: article.url})
       .then(function(results){
 
         console.log("Posted to MongoDB");
