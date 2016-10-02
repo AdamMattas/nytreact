@@ -21433,9 +21433,9 @@
 
 	// Here we include all of the sub-components
 	//var Form = require('./Children/Form');
-	var Results = __webpack_require__(173);
-	var Saved = __webpack_require__(198);
-	var Search = __webpack_require__(200);
+	//var Results = require('./Children/Search_Children/Results');
+	var Saved = __webpack_require__(173);
+	var Search = __webpack_require__(198);
 
 	// Helper Function
 	var helpers = __webpack_require__(175);
@@ -21448,57 +21448,11 @@
 	  // Here we set a generic state associated with the number of clicks
 	  getInitialState: function getInitialState() {
 	    return {
-	      searchTerm: "",
-	      search: "",
-	      results: [],
+	      //searchTerm: "",
+	      //search: "",
+	      //results: [],
 	      articles: [] /*Note how we added in this history state variable*/
 	    };
-	  },
-
-	  // This function allows childrens to update the parent.
-	  setTerm: function setTerm(term) {
-	    this.setState({
-	      searchTerm: term
-	    });
-	  },
-
-	  // This function allows childrens to update the parent.
-	  setStart: function setStart(startDate) {
-	    this.setState({
-	      searchStart: startDate
-	    });
-	  },
-
-	  // This function allows childrens to update the parent.
-	  setEnd: function setEnd(endDate) {
-	    this.setState({
-	      searchEnd: endDate
-	    });
-	  },
-
-	  // If the component changes (i.e. if a search is entered)... 
-	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
-
-	    if (prevState.searchTerm != this.state.searchTerm) {
-	      console.log("UPDATED");
-
-	      // Run the query for the address
-	      helpers.runQuery(this.state.searchTerm, this.state.searchStart, this.state.searchEnd).then(function (data) {
-	        if (data != this.state.results) {
-	          console.log("Search", data);
-
-	          var queryArr = data.data.response.docs;
-	          var newResults = [];
-	          for (var i = 0; i < queryArr.length; i++) {
-	            newResults.push(queryArr[i]);
-	          }
-
-	          this.setState({
-	            results: newResults
-	          });
-	        }
-	      }.bind(this));
-	    }
 	  },
 
 	  // The moment the page renders get the Articles
@@ -21552,20 +21506,14 @@
 	        React.createElement(
 	          'div',
 	          { className: 'col-md-12' },
-	          React.createElement(Search, { setTerm: this.setTerm, setStart: this.setStart, setEnd: this.setEnd })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'col-md-12' },
-	          React.createElement(Results, { results: this.state.results })
+	          React.createElement(Search, null)
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'col-md-12' },
 	          React.createElement(Saved, { articles: this.state.articles })
 	        )
-	      ),
-	      React.createElement('div', { className: 'row' })
+	      )
 	    );
 	  }
 	});
@@ -21582,14 +21530,11 @@
 	// Include React 
 	var React = __webpack_require__(1);
 
-	var Query = __webpack_require__(174);
-
-	// Helper Function
-	var helpers = __webpack_require__(175);
+	var Action = __webpack_require__(174);
 
 	// This is the results component
-	var Results = React.createClass({
-	  displayName: 'Results',
+	var Saved = React.createClass({
+	  displayName: 'Saved',
 
 
 	  // Here we render the function
@@ -21604,19 +21549,20 @@
 	        React.createElement(
 	          'h3',
 	          { className: 'panel-title text-center' },
-	          'Search Results'
+	          'Saved'
 	        )
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'panel-body text-center' },
-	        this.props.results.map(function (results, i) {
-	          return React.createElement(Query, {
-	            key: results._id,
-	            title: results.headline.main,
-	            lead: results.lead_paragraph,
-	            url: results.web_url,
-	            date: results.pub_date
+	        this.props.articles.map(function (articles, i) {
+	          return React.createElement(Action, {
+	            key: articles._id,
+	            id: articles._id,
+	            title: articles.title,
+	            lead: articles.lead,
+	            url: articles.url,
+	            date: articles.date
 	          });
 	        })
 	      )
@@ -21625,7 +21571,7 @@
 	});
 
 	// Export the component back for use in other files
-	module.exports = Results;
+	module.exports = Saved;
 
 /***/ },
 /* 174 */
@@ -21640,19 +21586,14 @@
 	var helpers = __webpack_require__(175);
 
 	// This is the results component
-	var Query = React.createClass({
-	  displayName: 'Query',
+	var Action = React.createClass({
+	  displayName: 'Action',
 
 
 	  // This function will respond to the user click
 	  handleClick: function handleClick() {
-	    // Send article data to server to save to db
-	    helpers.postArticles({
-	      title: this.props.title,
-	      lead: this.props.lead,
-	      date: this.props.date,
-	      url: this.props.url
-	    }).then(function (res) {
+	    // Send article data to server to delete from db
+	    helpers.deleteArticles(this.props.id).then(function (res) {
 	      console.log(res.status);
 	      // Show message
 	      //this.props.saved(res.status);
@@ -21684,7 +21625,7 @@
 	          React.createElement(
 	            'button',
 	            { className: 'btn btn-primary', onClick: this.handleClick },
-	            'Save'
+	            'Remove'
 	          ),
 	          React.createElement(
 	            'a',
@@ -21704,7 +21645,7 @@
 	});
 
 	// Export the component back for use in other files
-	module.exports = Query;
+	module.exports = Action;
 
 /***/ },
 /* 175 */
@@ -23127,11 +23068,165 @@
 	// Include React 
 	var React = __webpack_require__(1);
 
-	var Action = __webpack_require__(199);
+	var Results = __webpack_require__(199);
+
+	// Helper Function
+	var helpers = __webpack_require__(175);
+
+	// This is the form component. 
+	var Search = React.createClass({
+	  displayName: 'Search',
+
+
+	  // Here we set a generic state associated with the text being searched for
+	  getInitialState: function getInitialState() {
+	    return {
+	      term: "",
+	      startDate: "",
+	      endDate: "",
+	      results: []
+	    };
+	  },
+
+	  // This function will respond to the user input 
+	  handleChange: function handleChange(event) {
+
+	    // Here we create syntax to capture any change in text to the query terms (pre-search).
+	    // See this Stack Overflow answer for more details: 
+	    // http://stackoverflow.com/questions/21029999/react-js-identifying-different-inputs-with-one-onchange-handler
+	    var newState = {};
+	    newState[event.target.id] = event.target.value;
+	    this.setState(newState);
+	  },
+
+	  // When a user submits... 
+	  handleClick: function handleClick() {
+
+	    console.log("CLICK");
+	    console.log(this.state.term, this.state.startDate, this.state.endDate);
+
+	    if (term === "" || startDate === "" || endDate === "") {
+	      alert('Please fill out the entire form.');
+	    } else {
+	      console.log("UPDATED");
+
+	      // Run the query for the address
+	      helpers.runQuery(this.state.term, this.state.startDate, this.state.endDate).then(function (data) {
+	        if (data != this.state.results) {
+	          console.log("Search", data);
+
+	          var queryArr = data.data.response.docs;
+	          var newResults = [];
+	          for (var i = 0; i < queryArr.length; i++) {
+	            newResults.push(queryArr[i]);
+	          }
+
+	          this.setState({
+	            results: newResults
+	          });
+	        }
+	      }.bind(this));
+	    }
+	  },
+
+	  // Here we render the function
+	  render: function render() {
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'panel panel-default' },
+	        React.createElement(
+	          'div',
+	          { className: 'panel-heading' },
+	          React.createElement(
+	            'h3',
+	            { className: 'panel-title text-center' },
+	            'Query'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'panel-body text-center' },
+	          React.createElement(
+	            'form',
+	            null,
+	            React.createElement(
+	              'div',
+	              { className: 'form-group' },
+	              React.createElement(
+	                'h4',
+	                { className: '' },
+	                React.createElement(
+	                  'strong',
+	                  null,
+	                  'Topic'
+	                )
+	              ),
+	              React.createElement('input', { type: 'text', className: 'form-control text-center', id: 'term', onChange: this.handleChange, required: true }),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'h4',
+	                { className: '' },
+	                React.createElement(
+	                  'strong',
+	                  null,
+	                  'Start Date'
+	                )
+	              ),
+	              React.createElement('input', { type: 'text', className: 'form-control text-center', id: 'startDate', onChange: this.handleChange, required: true }),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'h4',
+	                { className: '' },
+	                React.createElement(
+	                  'strong',
+	                  null,
+	                  'End Date'
+	                )
+	              ),
+	              React.createElement('input', { type: 'text', className: 'form-control text-center', id: 'endDate', onChange: this.handleChange, required: true }),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-primary', onClick: this.handleClick },
+	                'Submit'
+	              )
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'col-md-12' },
+	        React.createElement(Results, { results: this.state.results })
+	      )
+	    );
+	  }
+	});
+
+	// Export the component back for use in other files
+	module.exports = Search;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Include React 
+	var React = __webpack_require__(1);
+
+	var Query = __webpack_require__(200);
+
+	// Helper Function
+	var helpers = __webpack_require__(175);
 
 	// This is the results component
-	var Saved = React.createClass({
-	  displayName: 'Saved',
+	var Results = React.createClass({
+	  displayName: 'Results',
 
 
 	  // Here we render the function
@@ -23146,20 +23241,19 @@
 	        React.createElement(
 	          'h3',
 	          { className: 'panel-title text-center' },
-	          'Saved'
+	          'Search Results'
 	        )
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'panel-body text-center' },
-	        this.props.articles.map(function (articles, i) {
-	          return React.createElement(Action, {
-	            key: articles._id,
-	            id: articles._id,
-	            title: articles.title,
-	            lead: articles.lead,
-	            url: articles.url,
-	            date: articles.date
+	        this.props.results.map(function (results, i) {
+	          return React.createElement(Query, {
+	            key: results._id,
+	            title: results.headline.main,
+	            lead: results.lead_paragraph,
+	            url: results.web_url,
+	            date: results.pub_date
 	          });
 	        })
 	      )
@@ -23168,10 +23262,10 @@
 	});
 
 	// Export the component back for use in other files
-	module.exports = Saved;
+	module.exports = Results;
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23183,14 +23277,19 @@
 	var helpers = __webpack_require__(175);
 
 	// This is the results component
-	var Action = React.createClass({
-	  displayName: 'Action',
+	var Query = React.createClass({
+	  displayName: 'Query',
 
 
 	  // This function will respond to the user click
 	  handleClick: function handleClick() {
-	    // Send article data to server to delete from db
-	    helpers.deleteArticles(this.props.id).then(function (res) {
+	    // Send article data to server to save to db
+	    helpers.postArticles({
+	      title: this.props.title,
+	      lead: this.props.lead,
+	      date: this.props.date,
+	      url: this.props.url
+	    }).then(function (res) {
 	      console.log(res.status);
 	      // Show message
 	      //this.props.saved(res.status);
@@ -23222,7 +23321,7 @@
 	          React.createElement(
 	            'button',
 	            { className: 'btn btn-primary', onClick: this.handleClick },
-	            'Remove'
+	            'Save'
 	          ),
 	          React.createElement(
 	            'a',
@@ -23242,125 +23341,7 @@
 	});
 
 	// Export the component back for use in other files
-	module.exports = Action;
-
-/***/ },
-/* 200 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	// Include React 
-	var React = __webpack_require__(1);
-
-	// This is the form component. 
-	var Search = React.createClass({
-	  displayName: "Search",
-
-
-	  // Here we set a generic state associated with the text being searched for
-	  getInitialState: function getInitialState() {
-	    return {
-	      term: "",
-	      startDate: "",
-	      endDate: ""
-	    };
-	  },
-
-	  // This function will respond to the user input 
-	  handleChange: function handleChange(event) {
-
-	    // Here we create syntax to capture any change in text to the query terms (pre-search).
-	    // See this Stack Overflow answer for more details: 
-	    // http://stackoverflow.com/questions/21029999/react-js-identifying-different-inputs-with-one-onchange-handler
-	    var newState = {};
-	    newState[event.target.id] = event.target.value;
-	    this.setState(newState);
-	  },
-
-	  // When a user submits... 
-	  handleClick: function handleClick() {
-
-	    console.log("CLICK");
-	    console.log(this.state.term, this.state.startDate, this.state.endDate);
-
-	    // Set the parent to have the search term
-	    this.props.setTerm(this.state.term);
-	    this.props.setStart(this.state.startDate);
-	    this.props.setEnd(this.state.endDate);
-	  },
-
-	  // Here we render the function
-	  render: function render() {
-
-	    return React.createElement(
-	      "div",
-	      { className: "panel panel-default" },
-	      React.createElement(
-	        "div",
-	        { className: "panel-heading" },
-	        React.createElement(
-	          "h3",
-	          { className: "panel-title text-center" },
-	          "Query"
-	        )
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "panel-body text-center" },
-	        React.createElement(
-	          "form",
-	          null,
-	          React.createElement(
-	            "div",
-	            { className: "form-group" },
-	            React.createElement(
-	              "h4",
-	              { className: "" },
-	              React.createElement(
-	                "strong",
-	                null,
-	                "Topic"
-	              )
-	            ),
-	            React.createElement("input", { type: "text", className: "form-control text-center", id: "term", onChange: this.handleChange, required: true }),
-	            React.createElement("br", null),
-	            React.createElement(
-	              "h4",
-	              { className: "" },
-	              React.createElement(
-	                "strong",
-	                null,
-	                "Start Date"
-	              )
-	            ),
-	            React.createElement("input", { type: "text", className: "form-control text-center", id: "startDate", onChange: this.handleChange, required: true }),
-	            React.createElement("br", null),
-	            React.createElement(
-	              "h4",
-	              { className: "" },
-	              React.createElement(
-	                "strong",
-	                null,
-	                "End Date"
-	              )
-	            ),
-	            React.createElement("input", { type: "text", className: "form-control text-center", id: "endDate", onChange: this.handleChange, required: true }),
-	            React.createElement("br", null),
-	            React.createElement(
-	              "button",
-	              { type: "button", className: "btn btn-primary", onClick: this.handleClick },
-	              "Submit"
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-
-	// Export the component back for use in other files
-	module.exports = Search;
+	module.exports = Query;
 
 /***/ }
 /******/ ]);

@@ -1,6 +1,11 @@
 // Include React 
 var React = require('react');
 
+var Results = require('./Search_Children/Results');
+
+// Helper Function
+var helpers = require('../utils/helpers.js');
+
 // This is the form component. 
 var Search = React.createClass({
 
@@ -9,19 +14,20 @@ var Search = React.createClass({
     return {
       term: "",
       startDate: "",
-      endDate: ""
+      endDate: "",
+      results: []
     }
   },
 
   // This function will respond to the user input 
   handleChange: function(event){
 
-      // Here we create syntax to capture any change in text to the query terms (pre-search).
-      // See this Stack Overflow answer for more details: 
-      // http://stackoverflow.com/questions/21029999/react-js-identifying-different-inputs-with-one-onchange-handler
-      var newState = {};
-      newState[event.target.id] = event.target.value;
-      this.setState(newState);
+    // Here we create syntax to capture any change in text to the query terms (pre-search).
+    // See this Stack Overflow answer for more details: 
+    // http://stackoverflow.com/questions/21029999/react-js-identifying-different-inputs-with-one-onchange-handler
+    var newState = {};
+    newState[event.target.id] = event.target.value;
+    this.setState(newState);
 
   },
 
@@ -30,11 +36,33 @@ var Search = React.createClass({
 
     console.log("CLICK");
     console.log(this.state.term, this.state.startDate, this.state.endDate);
-    
-    // Set the parent to have the search term
-    this.props.setTerm(this.state.term);
-    this.props.setStart(this.state.startDate);
-    this.props.setEnd(this.state.endDate);
+
+    if (term === "" || startDate === "" || endDate === "") {
+      alert('Please fill out the entire form.');
+    } else {
+      console.log("UPDATED");
+
+      // Run the query for the address
+      helpers.runQuery(this.state.term, this.state.startDate, this.state.endDate)
+        .then(function(data){
+          if (data != this.state.results)
+          {
+            console.log("Search" , data);
+
+            var queryArr = data.data.response.docs;
+            var newResults = [];
+            for(var i=0; i<queryArr.length; i++){
+              newResults.push(queryArr[i]);
+            }
+
+            this.setState({
+              results: newResults
+            })
+
+          }
+        }.bind(this))
+        
+    }
 
   },
 
@@ -42,12 +70,12 @@ var Search = React.createClass({
   render: function(){
 
     return(
-
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title text-center">Query</h3>
-        </div>
-        <div className="panel-body text-center">
+      <div>
+        <div className="panel panel-default">
+          <div className="panel-heading">
+            <h3 className="panel-title text-center">Query</h3>
+          </div>
+          <div className="panel-body text-center">
 
             <form>
               <div className="form-group">
@@ -71,10 +99,15 @@ var Search = React.createClass({
               </div>
 
             </form>
+          </div>
+        </div>
+
+        <div className="col-md-12">
+          
+          <Results results={this.state.results} />
+
         </div>
       </div>
-
-
 
     )
   }
