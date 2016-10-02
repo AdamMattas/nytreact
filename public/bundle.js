@@ -21723,7 +21723,7 @@
 	        React.createElement(
 	          'h3',
 	          { className: 'panel-title text-center' },
-	          'Results'
+	          'Search Results'
 	        )
 	      ),
 	      React.createElement(
@@ -21782,52 +21782,39 @@
 
 	    return React.createElement(
 	      'div',
-	      { className: 'panel panel-default' },
+	      { className: 'panel-body text-center' },
 	      React.createElement(
-	        'div',
-	        { className: 'panel-heading' },
+	        'li',
+	        { className: 'list-group-item' },
 	        React.createElement(
 	          'h3',
-	          { className: 'panel-title text-center' },
-	          'Query'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'panel-body text-center' },
+	          null,
+	          this.props.title
+	        ),
 	        React.createElement(
-	          'li',
-	          { className: 'list-group-item' },
+	          'p',
+	          null,
+	          this.props.lead
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'btn-group pull-right' },
 	          React.createElement(
-	            'h3',
-	            null,
-	            this.props.title
+	            'button',
+	            { className: 'btn btn-primary', onClick: this.handleClick },
+	            'Save'
 	          ),
 	          React.createElement(
-	            'p',
-	            null,
-	            this.props.lead
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'btn-group pull-right' },
-	            React.createElement(
-	              'button',
-	              { className: 'btn btn-primary', onClick: this.handleClick },
-	              'Save'
-	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'btn btn-default', href: this.props.url, target: '_blank' },
-	              'View Article'
-	            )
-	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            'Date Published: ',
-	            this.props.date
+	            'a',
+	            { className: 'btn btn-default', href: this.props.url, target: '_blank' },
+	            'View Article'
 	          )
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          'Date Published: ',
+	          this.props.date
 	        )
 	      )
 	    );

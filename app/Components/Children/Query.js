@@ -26,10 +26,6 @@ var Query = React.createClass({
 
     return(
 
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title text-center">Query</h3>
-        </div>
         <div className="panel-body text-center">
 
             <li className="list-group-item">
@@ -45,7 +41,6 @@ var Query = React.createClass({
             </li>
 
         </div>
-      </div>
 
     )
   }

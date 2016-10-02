@@ -16,7 +16,7 @@ var Results = React.createClass({
 
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h3 className="panel-title text-center">Results</h3>
+          <h3 className="panel-title text-center">Search Results</h3>
         </div>
         <div className="panel-body text-center">
 

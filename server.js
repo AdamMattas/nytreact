@@ -63,16 +63,23 @@ app.post('/api/saved', function(req, res){
   var newSearch = new Article(req.body);
   console.log("BODY: " + newSearch);
 
-  // Here we'll save the article based on the JSON input. 
-  Article.create({"title": req.body.title, "date": req.body.date, "url": req.body.url}, function(err){
-    if(err){
-      console.log(err);
+  Article.count({'title': req.body.title}, function (err, count){ 
+    if(count > 0){
+        console.log('Already exists!');
+    }else{
+      // Here we'll save the article based on the JSON input. 
+      Article.create({"title": req.body.title, "date": req.body.date, "url": req.body.url}, function(err){
+        if(err){
+          console.log(err);
+        }
+        else {
+          // res.send("Saved Search");
+          res.json({status: 'saved'})
+        }
+      })
     }
-    else {
-      // res.send("Saved Search");
-      res.json({status: 'saved'})
-    }
-  })
+  }); 
+
 });
 
 // -------------------------------------------------
