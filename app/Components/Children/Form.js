@@ -38,6 +38,16 @@ var Form = React.createClass({
 
   },
 
+  componentWillMount: function(){
+
+    this.setState({
+      term: "",
+      startDate: "",
+      endDate: ""
+    })
+    
+  },
+
   // Here we render the function
   render: function(){
 
@@ -56,15 +66,15 @@ var Form = React.createClass({
                 {/*Note how each of the form elements has an id that matches the state. This is not necessary but it is convenient.
                   Also note how each has an onChange event associated with our handleChange event. 
                 */}
-                <input type="text" className="form-control text-center" id="term" onChange= {this.handleChange} required/>
+                <input type="text" className="form-control text-center" id="term" onChange={this.handleChange} required/>
                 <br />
 
                 <h4 className=""><strong>Start Date</strong></h4>
-                <input type="text" className="form-control text-center" id="startDate" onChange= {this.handleChange} required/>
+                <input type="text" className="form-control text-center" id="startDate" onChange={this.handleChange} required/>
                 <br />
 
                 <h4 className=""><strong>End Date</strong></h4>
-                <input type="text" className="form-control text-center" id="endDate" onChange= {this.handleChange} required/>
+                <input type="text" className="form-control text-center" id="endDate" onChange={this.handleChange} required/>
                 <br />
 
                 <button type="button" className="btn btn-primary" onClick={this.handleClick}>Submit</button>

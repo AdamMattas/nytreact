@@ -83,7 +83,7 @@ app.post('/api/saved', function(req, res){
 });
 
 // Delete One from the DB
-app.delete('/api/delete/:id', function(req, res) {
+app.delete('/api/saved/:id', function(req, res) {
 
   // remove a note using the objectID
   Article.remove({"_id": req.params.id})

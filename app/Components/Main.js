@@ -2,7 +2,7 @@
 var React = require('react');
 
 // Here we include all of the sub-components
-var Form = require('./Children/Form');
+//var Form = require('./Children/Form');
 var Results = require('./Children/Search_Children/Results');
 var Saved = require('./Children/Saved');
 var Search = require('./Children/Search');
@@ -19,7 +19,6 @@ var Main = React.createClass({
       searchTerm: "",
       search: "",
       results: [],
-      // articles: "",
       articles: [] /*Note how we added in this history state variable*/
     }
   },  
@@ -113,7 +112,7 @@ var Main = React.createClass({
 
           <div className="col-md-12">
           
-            <Form setTerm={this.setTerm} setStart={this.setStart} setEnd={this.setEnd}/>
+            <Search setTerm={this.setTerm} setStart={this.setStart} setEnd={this.setEnd}/>
 
           </div>
 

@@ -52,7 +52,7 @@ var helpers = {
   deleteArticles: function(id){
 
     console.log("DB Article ", id)
-    return axios.delete('/api/delete/' + id)
+    return axios.delete('/api/saved/' + id)
       .then(function(results){
 
         console.log("Deleted from MongoDB");
