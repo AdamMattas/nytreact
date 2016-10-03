@@ -19,7 +19,6 @@ var helpers = {
       .then(function(response){
 
         console.log(response);
-        console.log(response.data.response.docs[0]);
         return response;
     })
 

@@ -2,7 +2,6 @@
 var React = require('react');
 
 // Here we include all of the sub-components
-//var Results = require('./Children/Search_Children/Results');
 var Saved = require('./Children/Saved');
 var Search = require('./Children/Search');
 
@@ -15,9 +14,6 @@ var Main = React.createClass({
   // Here we set a generic state associated with the number of clicks
   getInitialState: function(){
     return {
-      //searchTerm: "",
-      //search: "",
-      //results: [],
       articles: [] /*Note how we added in this history state variable*/
     }
   },  
@@ -64,7 +60,7 @@ var Main = React.createClass({
 
           </div>
 
-          <div className="col-md-12">
+          <div className="col-md-12 no-pad">
         
             {this.state.articles.length !== 0 ? 
             <Saved articles={this.state.articles}>

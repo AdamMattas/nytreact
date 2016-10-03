@@ -18,7 +18,6 @@ var Query = React.createClass({
     }).then(function(res){
       console.log(res.status);
       // Show message
-      //this.props.saved(res.status);
     }.bind(this));
   },
 

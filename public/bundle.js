@@ -21496,7 +21496,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'col-md-12' },
+	          { className: 'col-md-12 no-pad' },
 	          this.state.articles.length !== 0 ? React.createElement(Saved, { articles: this.state.articles }) : null
 	        )
 	      )
@@ -21659,7 +21659,6 @@
 	    return axios.get(queryURL).then(function (response) {
 
 	      console.log(response);
-	      console.log(response.data.response.docs[0]);
 	      return response;
 	    });
 	  },
@@ -23089,7 +23088,6 @@
 	  handleClick: function handleClick() {
 
 	    console.log("CLICK");
-	    console.log(this.state.term, this.state.startDate, this.state.endDate);
 
 	    if (this.state.term === "" || this.state.startDate === "" || this.state.endDate === "") {
 	      alert('Please fill out the entire form.');
@@ -23186,7 +23184,7 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'col-md-12' },
+	        { className: 'col-md-12 no-pad' },
 	        this.state.results.length !== 0 ? React.createElement(Results, { results: this.state.results }) : null
 	      )
 	    );
@@ -23267,16 +23265,6 @@
 	  displayName: 'Query',
 
 
-	  // Here we set a generic state associated with the number of clicks
-	  getInitialState: function getInitialState() {
-	    return {
-	      //searchTerm: "",
-	      //search: "",
-	      //results: [],
-	      articles: [] /*Note how we added in this history state variable*/
-	    };
-	  },
-
 	  // This function will respond to the user click
 	  handleClick: function handleClick() {
 	    // Send article data to server to save to db
@@ -23288,24 +23276,6 @@
 	    }).then(function (res) {
 	      console.log(res.status);
 	      // Show message
-	      //this.props.saved(res.status);
-
-	      // Get the latest history.
-	      helpers.getArticles().then(function (response) {
-	        if (response != this.state.articles) {
-	          console.log("Database", response);
-
-	          var dbArr = response.data;
-	          var newResponse = [];
-	          for (var i = 0; i < dbArr.length; i++) {
-	            newResponse.push(dbArr[i]);
-	          }
-
-	          this.setState({
-	            articles: newResponse
-	          });
-	        }
-	      }.bind(this));
 	    }.bind(this));
 	  },
 

@@ -35,7 +35,6 @@ var Search = React.createClass({
   handleClick: function(){
 
     console.log("CLICK");
-    console.log(this.state.term, this.state.startDate, this.state.endDate);
 
     if (this.state.term === "" || this.state.startDate === "" || this.state.endDate === "") {
       alert('Please fill out the entire form.');
@@ -102,7 +101,7 @@ var Search = React.createClass({
           </div>
         </div>
 
-        <div className="col-md-12">
+        <div className="col-md-12 no-pad">
           
           {this.state.results.length !== 0 ? 
           <Results results={this.state.results}>
