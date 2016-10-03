@@ -22,8 +22,10 @@ app.use(express.static('./public'));
 
 // -------------------------------------------------
 
+var uristring = process.env.MONGODB_URI || process.env.MONGOHQ_URL;
+
 // MongoDB Configuration configuration (Change this URL to your own DB)
-mongoose.connect('mongodb://heroku_c4k1bb7q:uapa7aov1uep55kk1kq8a5o6ir@ds035796.mlab.com:35796/heroku_c4k1bb7q');
+mongoose.connect(uristring);
 var db = mongoose.connection;
 
 db.on('error', function (err) {
@@ -91,13 +93,9 @@ app.delete('/api/saved/:id', function(req, res) {
     // log any errors from mongojs
     if (err) {
       console.log(err);
-    } 
-    // otherwise, send the mongojs response to the browser.
-    // this will fire off the success function of the ajax request
-    else {
+    } else {
       console.log(data);
       res.send(data);
-      //res.sendFile('./public/index.html');
     }
   });
 });

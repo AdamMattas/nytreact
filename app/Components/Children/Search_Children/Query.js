@@ -16,8 +16,7 @@ var Query = React.createClass({
       date: this.props.date,
       url: this.props.url
     }).then(function(res){
-      console.log(res.status);
-      // Show message
+      console.log(res.status);ge
     }.bind(this));
   },
 

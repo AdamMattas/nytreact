@@ -3,9 +3,6 @@ var React = require('react');
 
 var Query = require('./Query');
 
-// Helper Function
-var helpers = require('../../utils/helpers.js');
-
 // This is the results component
 var Results = React.createClass({
 

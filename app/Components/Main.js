@@ -11,28 +11,31 @@ var helpers = require('./utils/helpers.js');
 // This is the main component. 
 var Main = React.createClass({
 
-  // Here we set a generic state associated with the number of clicks
+  // Here we set an empty array that will later hold retrieved articles from the DB
   getInitialState: function(){
     return {
-      articles: [] /*Note how we added in this history state variable*/
+      articles: []
     }
   },  
 
-  // The moment the page renders get the Articles
+  // The moment the page renders get the Articles from the DB
   componentDidMount: function(){
 
-    // Get the latest history.
+    // Get the latest saved articles using the helper.
     helpers.getArticles()
       .then(function(response){
+        //checks if there are articles sent back
         if (response != this.state.articles){
           console.log ("Database", response);
 
-          var dbArr = response.data;
-            var newResponse = [];
+          var dbArr = response.data; //set response to a variable
+            var newResponse = []; //create empty array to push to
+            //loop through response and push each article to the array
             for(var i=0; i<dbArr.length; i++){
               newResponse.push(dbArr[i]);
             }
 
+            //update the article state with the retrieved articles
             this.setState({
               articles: newResponse
             })

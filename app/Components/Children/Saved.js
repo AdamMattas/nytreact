@@ -3,7 +3,6 @@ var React = require('react');
 
 var Action = require('./Action');
 
-// This is the results component
 var Saved = React.createClass({
 
   // Here we render the function
@@ -13,7 +12,7 @@ var Saved = React.createClass({
 
       <div className="panel panel-default">
         <div className="panel-heading">
-          <h3 className="panel-title text-center">Saved</h3>
+          <h3 className="panel-title text-center">Saved Articles</h3>
         </div>
         <div className="panel-body text-center">
 

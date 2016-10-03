@@ -21432,7 +21432,6 @@
 	var React = __webpack_require__(1);
 
 	// Here we include all of the sub-components
-	//var Results = require('./Children/Search_Children/Results');
 	var Saved = __webpack_require__(173);
 	var Search = __webpack_require__(198);
 
@@ -21444,30 +21443,30 @@
 	  displayName: 'Main',
 
 
-	  // Here we set a generic state associated with the number of clicks
+	  // Here we set an empty array that will later hold retrieved articles from the DB
 	  getInitialState: function getInitialState() {
 	    return {
-	      //searchTerm: "",
-	      //search: "",
-	      //results: [],
-	      articles: [] /*Note how we added in this history state variable*/
+	      articles: []
 	    };
 	  },
 
-	  // The moment the page renders get the Articles
+	  // The moment the page renders get the Articles from the DB
 	  componentDidMount: function componentDidMount() {
 
-	    // Get the latest history.
+	    // Get the latest saved articles using the helper.
 	    helpers.getArticles().then(function (response) {
+	      //checks if there are articles sent back
 	      if (response != this.state.articles) {
 	        console.log("Database", response);
 
-	        var dbArr = response.data;
-	        var newResponse = [];
+	        var dbArr = response.data; //set response to a variable
+	        var newResponse = []; //create empty array to push to
+	        //loop through response and push each article to the array
 	        for (var i = 0; i < dbArr.length; i++) {
 	          newResponse.push(dbArr[i]);
 	        }
 
+	        //update the article state with the retrieved articles
 	        this.setState({
 	          articles: newResponse
 	        });
@@ -21518,7 +21517,6 @@
 
 	var Action = __webpack_require__(174);
 
-	// This is the results component
 	var Saved = React.createClass({
 	  displayName: 'Saved',
 
@@ -21535,7 +21533,7 @@
 	        React.createElement(
 	          'h3',
 	          { className: 'panel-title text-center' },
-	          'Saved'
+	          'Saved Articles'
 	        )
 	      ),
 	      React.createElement(
@@ -21571,7 +21569,8 @@
 	// Helper Function
 	var helpers = __webpack_require__(175);
 
-	// This is the results component
+	// This component displays the articles that have been saved
+	// and handles the removal
 	var Action = React.createClass({
 	  displayName: 'Action',
 
@@ -21581,8 +21580,6 @@
 	    // Send article data to server to delete from db
 	    helpers.deleteArticles(this.props.id).then(function (res) {
 	      console.log(res.status);
-	      // Show message
-	      //this.props.saved(res.status);
 	    }.bind(this));
 	  },
 
@@ -21610,7 +21607,7 @@
 	          { className: 'btn-group pull-right' },
 	          React.createElement(
 	            'button',
-	            { className: 'btn btn-primary', onClick: this.handleClick },
+	            { className: 'btn btn-danger', onClick: this.handleClick },
 	            'Remove'
 	          ),
 	          React.createElement(
@@ -23089,22 +23086,26 @@
 
 	    console.log("CLICK");
 
+	    //check to make sure all of the fields have been filled out
 	    if (this.state.term === "" || this.state.startDate === "" || this.state.endDate === "") {
 	      alert('Please fill out the entire form.');
 	    } else {
 	      console.log("UPDATED");
 
-	      // Run the query for the address
+	      // Run the helper query for articles
 	      helpers.runQuery(this.state.term, this.state.startDate, this.state.endDate).then(function (data) {
+	        //checks if there are results sent back from api
 	        if (data != this.state.results) {
 	          console.log("Search", data);
 
-	          var queryArr = data.data.response.docs;
-	          var newResults = [];
+	          var queryArr = data.data.response.docs; //set response to a variable
+	          var newResults = []; //create empty array to push to
+	          //loop through response and push each article to the array
 	          for (var i = 0; i < queryArr.length; i++) {
 	            newResults.push(queryArr[i]);
 	          }
 
+	          //update the results state with the retrieved articles
 	          this.setState({
 	            results: newResults
 	          });
@@ -23205,9 +23206,6 @@
 
 	var Query = __webpack_require__(200);
 
-	// Helper Function
-	var helpers = __webpack_require__(175);
-
 	// This is the results component
 	var Results = React.createClass({
 	  displayName: 'Results',
@@ -23274,8 +23272,7 @@
 	      date: this.props.date,
 	      url: this.props.url
 	    }).then(function (res) {
-	      console.log(res.status);
-	      // Show message
+	      console.log(res.status);ge;
 	    }.bind(this));
 	  },
 
