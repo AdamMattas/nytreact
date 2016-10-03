@@ -37,7 +37,7 @@ var Search = React.createClass({
     console.log("CLICK");
     console.log(this.state.term, this.state.startDate, this.state.endDate);
 
-    if (term === "" || startDate === "" || endDate === "") {
+    if (this.state.term === "" || this.state.startDate === "" || this.state.endDate === "") {
       alert('Please fill out the entire form.');
     } else {
       console.log("UPDATED");
@@ -68,12 +68,12 @@ var Search = React.createClass({
 
   // Here we render the function
   render: function(){
-
+    console.log("Rendered!");
     return(
       <div>
         <div className="panel panel-default">
           <div className="panel-heading">
-            <h3 className="panel-title text-center">Query</h3>
+            <h3 className="panel-title text-center">Search for Articles</h3>
           </div>
           <div className="panel-body text-center">
 
@@ -104,7 +104,9 @@ var Search = React.createClass({
 
         <div className="col-md-12">
           
-          <Results results={this.state.results} />
+          {this.state.results.length !== 0 ? 
+          <Results results={this.state.results}>
+          </Results> : null}
 
         </div>
       </div>

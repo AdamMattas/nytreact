@@ -21432,7 +21432,6 @@
 	var React = __webpack_require__(1);
 
 	// Here we include all of the sub-components
-	//var Form = require('./Children/Form');
 	//var Results = require('./Children/Search_Children/Results');
 	var Saved = __webpack_require__(173);
 	var Search = __webpack_require__(198);
@@ -21487,31 +21486,18 @@
 	        { className: 'row' },
 	        React.createElement(
 	          'div',
-	          { className: 'jumbotron' },
-	          React.createElement(
-	            'h2',
-	            { className: 'text-center' },
-	            'Address Finder!'
-	          ),
-	          React.createElement(
-	            'p',
-	            { className: 'text-center' },
-	            React.createElement(
-	              'em',
-	              null,
-	              'Enter a landmark to search for its exact address (ex: "Eiffel Tower").'
-	            )
-	          )
+	          null,
+	          React.createElement('img', { className: 'header', src: 'assets/images/nytimes_lrg.png' })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'col-md-12' },
+	          { className: 'col-md-12 no-pad' },
 	          React.createElement(Search, null)
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'col-md-12' },
-	          React.createElement(Saved, { articles: this.state.articles })
+	          this.state.articles.length !== 0 ? React.createElement(Saved, { articles: this.state.articles }) : null
 	        )
 	      )
 	    );
@@ -23105,7 +23091,7 @@
 	    console.log("CLICK");
 	    console.log(this.state.term, this.state.startDate, this.state.endDate);
 
-	    if (term === "" || startDate === "" || endDate === "") {
+	    if (this.state.term === "" || this.state.startDate === "" || this.state.endDate === "") {
 	      alert('Please fill out the entire form.');
 	    } else {
 	      console.log("UPDATED");
@@ -23131,7 +23117,7 @@
 
 	  // Here we render the function
 	  render: function render() {
-
+	    console.log("Rendered!");
 	    return React.createElement(
 	      'div',
 	      null,
@@ -23144,7 +23130,7 @@
 	          React.createElement(
 	            'h3',
 	            { className: 'panel-title text-center' },
-	            'Query'
+	            'Search for Articles'
 	          )
 	        ),
 	        React.createElement(
@@ -23201,7 +23187,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'col-md-12' },
-	        React.createElement(Results, { results: this.state.results })
+	        this.state.results.length !== 0 ? React.createElement(Results, { results: this.state.results }) : null
 	      )
 	    );
 	  }
@@ -23281,6 +23267,16 @@
 	  displayName: 'Query',
 
 
+	  // Here we set a generic state associated with the number of clicks
+	  getInitialState: function getInitialState() {
+	    return {
+	      //searchTerm: "",
+	      //search: "",
+	      //results: [],
+	      articles: [] /*Note how we added in this history state variable*/
+	    };
+	  },
+
 	  // This function will respond to the user click
 	  handleClick: function handleClick() {
 	    // Send article data to server to save to db
@@ -23293,6 +23289,23 @@
 	      console.log(res.status);
 	      // Show message
 	      //this.props.saved(res.status);
+
+	      // Get the latest history.
+	      helpers.getArticles().then(function (response) {
+	        if (response != this.state.articles) {
+	          console.log("Database", response);
+
+	          var dbArr = response.data;
+	          var newResponse = [];
+	          for (var i = 0; i < dbArr.length; i++) {
+	            newResponse.push(dbArr[i]);
+	          }
+
+	          this.setState({
+	            articles: newResponse
+	          });
+	        }
+	      }.bind(this));
 	    }.bind(this));
 	  },
 

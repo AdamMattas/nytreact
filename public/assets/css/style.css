@@ -1,0 +1,56 @@
+/*begin global styling*/
+*{
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html, body{
+  height: 100%;
+}
+
+body{
+  padding: 0px;
+  margin: 0px;
+}
+
+h1{ 
+  display: block;
+  font-size: 2em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
+
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+
+h3 { 
+    display: block;
+    font-size: 1.17em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+/*end global styling*/
+
+.no-pad{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.header{
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 25px;
+}

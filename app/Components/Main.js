@@ -2,7 +2,6 @@
 var React = require('react');
 
 // Here we include all of the sub-components
-//var Form = require('./Children/Form');
 //var Results = require('./Children/Search_Children/Results');
 var Saved = require('./Children/Saved');
 var Search = require('./Children/Search');
@@ -55,12 +54,11 @@ var Main = React.createClass({
 
         <div className="row">
 
-          <div className="jumbotron">
-            <h2 className="text-center">Address Finder!</h2>
-            <p className="text-center"><em>Enter a landmark to search for its exact address (ex: "Eiffel Tower").</em></p>
+          <div>
+            <img className="header" src="assets/images/nytimes_lrg.png" />
           </div>
 
-          <div className="col-md-12">
+          <div className="col-md-12 no-pad">
           
             <Search />
 
@@ -68,7 +66,9 @@ var Main = React.createClass({
 
           <div className="col-md-12">
         
-            <Saved articles={this.state.articles} />
+            {this.state.articles.length !== 0 ? 
+            <Saved articles={this.state.articles}>
+            </Saved> : null}
 
           </div>
 
